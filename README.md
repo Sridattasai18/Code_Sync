@@ -1,7 +1,7 @@
 <h1 align="center">
-  <img src="assets/octocode.png" alt="Code Sync - Automatically sync your code to GitHub." width="400">
+  <img src="assets/octocode.png" alt="LeetHub v2 - Automatically sync your code to GitHub." width="400">
   <br>
-  Code Sync PAT Edition - Sync your LeetCode to GitHub Securely
+  LeetHub PAT Edition - Sync your LeetCode to GitHub Securely
   <br>
   <br>
 </h1>
@@ -12,11 +12,11 @@
   </a>
 </p>
 
-## Welcome to Code Sync (PAT Edition)! 👋
+## Welcome to LeetHub (PAT Edition)! 👋
 
 Hey there! If you're like me, you probably spend a lot of time grinding on LeetCode. But manually copying and pasting your solutions to GitHub to build your portfolio? That gets old really fast.
 
-This is a customized version of Code Sync that completely replaces the old, broad GitHub OAuth flow with a **Fine-Grained Personal Access Token (PAT)**. 
+This is a customized version of LeetHub that completely replaces the old, broad GitHub OAuth flow with a **Fine-Grained Personal Access Token (PAT)**. 
 
 ### Why the change?
 The original extension required you to grant access to *all* your repositories just to upload code to one. That felt like too much permission! With this PAT edition, you create a token that only has access to a **single repository**. Your other projects stay completely private and secure.

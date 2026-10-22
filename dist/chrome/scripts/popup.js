@@ -39,10 +39,10 @@ const DIFFICULTY = Object.freeze({
   UNKNOWN: 'Unknown',
 });
 
-class CodeSyncError extends Error {
+class LeetHubError extends Error {
   constructor(message) {
     super(message);
-    this.name = 'Code SyncErr';
+    this.name = 'LeetHubErr';
   }
 }
 
@@ -58,7 +58,7 @@ function isEmptyObject(obj) {
 
 function assert(truthy, msg) {
   if (!truthy) {
-    throw new CodeSyncError(msg);
+    throw new LeetHubError(msg);
   }
 }
 
@@ -109,7 +109,7 @@ function getBrowser() {
   } else if (typeof browser !== 'undefined' && typeof browser.runtime !== 'undefined') {
     return browser;
   } else {
-    throw new CodeSyncError('BrowserNotSupported');
+    throw new LeetHubError('BrowserNotSupported');
   }
 }
 
@@ -160,7 +160,7 @@ function addLeadingZeros(title) {
 }
 
 function formatStats(time, timePercentile, space, spacePercentile) {
-  return `Time: ${time} (${timePercentile}%), Space: ${space} (${spacePercentile}%) - Code Sync`;
+  return `Time: ${time} (${timePercentile}%), Space: ${space} (${spacePercentile}%) - LeetHub`;
 }
 
 function isObject(obj) {
@@ -238,7 +238,7 @@ $('#save_pat').on('click', () => {
       $('#save_pat').removeClass('loading');
       if (xhr.status === 200) {
         const username = JSON.parse(xhr.responseText).login;
-        api.storage.local.set({ codesync_token: token, codesync_username: username }, () => {
+        api.storage.local.set({ leethub_token: token, leethub_username: username }, () => {
           $('#auth_mode').hide();
           $('#hook_mode').show();
         });
@@ -270,8 +270,8 @@ $('#reset_stats').on('click', () => {
   })
 });
 
-api.storage.local.get('codesync_token', data => {
-  const token = data.codesync_token;
+api.storage.local.get('leethub_token', data => {
+  const token = data.leethub_token;
   if (token === null || token === undefined) {
     action = true;
     $('#auth_mode').show();
@@ -288,16 +288,16 @@ api.storage.local.get('codesync_token', data => {
             if (data2 && data2.mode_type === 'commit') {
               $('#commit_mode').show();
               /* Get problem stats and repo link */
-              api.storage.local.get(['stats', 'codesync_hook'], data3 => {
+              api.storage.local.get(['stats', 'leethub_hook'], data3 => {
                 const stats = data3?.stats;
                 $('#p_solved').text(stats?.solved ?? 0);
                 $('#p_solved_easy').text(stats?.easy ?? 0);
                 $('#p_solved_medium').text(stats?.medium ?? 0);
                 $('#p_solved_hard').text(stats?.hard ?? 0);
-                const CodeSyncHook = data3?.codesync_hook;
-                if (CodeSyncHook) {
+                const leethubHook = data3?.leethub_hook;
+                if (leethubHook) {
                   $('#repo_url').html(
-                    `<a target="blank" style="color: cadetblue !important; font-size:0.8em;" href="https://github.com/${CodeSyncHook}">${CodeSyncHook}</a>`
+                    `<a target="blank" style="color: cadetblue !important; font-size:0.8em;" href="https://github.com/${leethubHook}">${leethubHook}</a>`
                   );
                 }
               });
@@ -308,7 +308,7 @@ api.storage.local.get('codesync_token', data => {
         } else if (xhr.status === 401) {
           // bad oAuth
           // reset token and redirect to authorization process again!
-          api.storage.local.set({ codesync_token: null }, () => {
+          api.storage.local.set({ leethub_token: null }, () => {
             console.log('BAD oAuth!!! Redirecting back to oAuth process');
             action = true;
             $('#auth_mode').show();

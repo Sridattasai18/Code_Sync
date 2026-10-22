@@ -13,8 +13,8 @@ import {
  */
 function LeetCodeV1() {
   this.difficulty;
-  this.progressSpinnerElementId = 'codesync_progress_elem';
-  this.progressSpinnerElementClass = 'codesync_progress';
+  this.progressSpinnerElementId = 'leethub_progress_elem';
+  this.progressSpinnerElementClass = 'leethub_progress';
   this.injectSpinnerStyle();
 }
 LeetCodeV1.prototype.init = async function () {};
@@ -85,7 +85,7 @@ LeetCodeV1.prototype.findCode = function (commitMsg) {
               slicedText.indexOf("'") + 1,
               slicedText.lastIndexOf("'")
             );
-            commitMsg = `Time: ${resultRuntime}, Memory: ${resultMemory} - Code Sync`;
+            commitMsg = `Time: ${resultRuntime}, Memory: ${resultMemory} - LeetHub`;
           }
 
           if (code != null) {
@@ -196,7 +196,7 @@ LeetCodeV1.prototype.parseStats = function () {
   const space = probStats[2].textContent;
   const spacePercentile = probStats[3].textContent;
 
-  return `Time: ${time} (${timePercentile}), Space: ${space} (${spacePercentile}) - Code Sync`;
+  return `Time: ${time} (${timePercentile}), Space: ${space} (${spacePercentile}) - LeetHub`;
 };
 /* Parser function for the question, question title, question difficulty, and tags */
 LeetCodeV1.prototype.parseQuestion = function () {
@@ -251,10 +251,10 @@ LeetCodeV1.prototype.parseQuestion = function () {
 /* Injects a spinner on left side to the "Run Code" button */
 LeetCodeV1.prototype.startSpinner = function () {
   try {
-    let elem = document.getElementById('codesync_progress_anchor_element');
+    let elem = document.getElementById('leethub_progress_anchor_element');
     if (!elem) {
       elem = document.createElement('span');
-      elem.id = 'codesync_progress_anchor_element';
+      elem.id = 'leethub_progress_anchor_element';
       elem.style = 'margin-right: 20px;padding-top: 2px;';
     }
     elem.innerHTML = `<div id="${this.progressSpinnerElementId}" class="${this.progressSpinnerElementClass}"></div>`;
@@ -291,7 +291,7 @@ LeetCodeV1.prototype.insertToAnchorElement = function (elem) {
     }
   }
 };
-/* Creates a ✔️ tick mark before "Run Code" button signaling Code Sync has done its job */
+/* Creates a ✔️ tick mark before "Run Code" button signaling LeetHub has done its job */
 LeetCodeV1.prototype.markUploaded = function () {
   let elem = document.getElementById(this.progressSpinnerElementId);
   if (elem) {
@@ -314,8 +314,8 @@ function LeetCodeV2() {
   this.submissionData;
   this.submissionId;
   this.difficulty;
-  this.progressSpinnerElementId = 'codesync_progress_elem';
-  this.progressSpinnerElementClass = 'codesync_progress';
+  this.progressSpinnerElementId = 'leethub_progress_elem';
+  this.progressSpinnerElementClass = 'leethub_progress';
   this.injectSpinnerStyle();
 }
 LeetCodeV2.prototype.init = async function () {
@@ -366,7 +366,7 @@ LeetCodeV2.prototype.init = async function () {
 LeetCodeV2.prototype.findCode = function () {
   const code = this.getCode();
   if (!code) {
-    throw new CodeSyncError('SolutionCodeNotFound');
+    throw new LeetHubError('SolutionCodeNotFound');
   }
 
   return code;
@@ -391,12 +391,12 @@ LeetCodeV2.prototype.getLanguageExtension = function () {
 
   const tag = document.querySelector('button[id^="headlessui-listbox-button"]');
   if (!tag) {
-    throw new CodeSyncError('LanguageButtonNotFound');
+    throw new LeetHubError('LanguageButtonNotFound');
   }
 
   const lang = tag.innerText;
   if (languages[lang] === undefined) {
-    throw new CodeSyncError(`UnknownLanguage::${lang}`);
+    throw new LeetHubError(`UnknownLanguage::${lang}`);
   }
 
   return languages[lang];
@@ -502,10 +502,10 @@ LeetCodeV2.prototype.parseDifficulty = function () {
   return 'unknown';
 };
 LeetCodeV2.prototype.startSpinner = function () {
-  let elem = document.getElementById('codesync_progress_anchor_element');
+  let elem = document.getElementById('leethub_progress_anchor_element');
   if (!elem) {
     elem = document.createElement('span');
-    elem.id = 'codesync_progress_anchor_element';
+    elem.id = 'leethub_progress_anchor_element';
     elem.style = 'margin-right: 20px;padding-top: 2px;';
   }
   elem.innerHTML = `<div id="${this.progressSpinnerElementId}" class="${this.progressSpinnerElementClass}"></div>`;

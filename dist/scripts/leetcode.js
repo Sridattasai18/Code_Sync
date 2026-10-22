@@ -39,10 +39,10 @@ const DIFFICULTY = Object.freeze({
   UNKNOWN: 'Unknown',
 });
 
-class util_CodeSyncError extends Error {
+class util_LeetHubError extends Error {
   constructor(message) {
     super(message);
-    this.name = 'Code SyncErr';
+    this.name = 'LeetHubErr';
   }
 }
 
@@ -58,7 +58,7 @@ function isEmptyObject(obj) {
 
 function assert(truthy, msg) {
   if (!truthy) {
-    throw new util_CodeSyncError(msg);
+    throw new util_LeetHubError(msg);
   }
 }
 
@@ -109,7 +109,7 @@ function getBrowser() {
   } else if (typeof browser !== 'undefined' && typeof browser.runtime !== 'undefined') {
     return browser;
   } else {
-    throw new util_CodeSyncError('BrowserNotSupported');
+    throw new util_LeetHubError('BrowserNotSupported');
   }
 }
 
@@ -160,7 +160,7 @@ function addLeadingZeros(title) {
 }
 
 function formatStats(time, timePercentile, space, spacePercentile) {
-  return `Time: ${time} (${timePercentile}%), Space: ${space} (${spacePercentile}%) - Code Sync`;
+  return `Time: ${time} (${timePercentile}%), Space: ${space} (${spacePercentile}%) - LeetHub`;
 }
 
 function isObject(obj) {
@@ -223,8 +223,8 @@ function mergeStats(obj1, obj2) {
  */
 function LeetCodeV1() {
   this.difficulty;
-  this.progressSpinnerElementId = 'codesync_progress_elem';
-  this.progressSpinnerElementClass = 'codesync_progress';
+  this.progressSpinnerElementId = 'leethub_progress_elem';
+  this.progressSpinnerElementClass = 'leethub_progress';
   this.injectSpinnerStyle();
 }
 LeetCodeV1.prototype.init = async function () {};
@@ -295,7 +295,7 @@ LeetCodeV1.prototype.findCode = function (commitMsg) {
               slicedText.indexOf("'") + 1,
               slicedText.lastIndexOf("'")
             );
-            commitMsg = `Time: ${resultRuntime}, Memory: ${resultMemory} - Code Sync`;
+            commitMsg = `Time: ${resultRuntime}, Memory: ${resultMemory} - LeetHub`;
           }
 
           if (code != null) {
@@ -406,7 +406,7 @@ LeetCodeV1.prototype.parseStats = function () {
   const space = probStats[2].textContent;
   const spacePercentile = probStats[3].textContent;
 
-  return `Time: ${time} (${timePercentile}), Space: ${space} (${spacePercentile}) - Code Sync`;
+  return `Time: ${time} (${timePercentile}), Space: ${space} (${spacePercentile}) - LeetHub`;
 };
 /* Parser function for the question, question title, question difficulty, and tags */
 LeetCodeV1.prototype.parseQuestion = function () {
@@ -461,10 +461,10 @@ LeetCodeV1.prototype.parseQuestion = function () {
 /* Injects a spinner on left side to the "Run Code" button */
 LeetCodeV1.prototype.startSpinner = function () {
   try {
-    let elem = document.getElementById('codesync_progress_anchor_element');
+    let elem = document.getElementById('leethub_progress_anchor_element');
     if (!elem) {
       elem = document.createElement('span');
-      elem.id = 'codesync_progress_anchor_element';
+      elem.id = 'leethub_progress_anchor_element';
       elem.style = 'margin-right: 20px;padding-top: 2px;';
     }
     elem.innerHTML = `<div id="${this.progressSpinnerElementId}" class="${this.progressSpinnerElementClass}"></div>`;
@@ -501,7 +501,7 @@ LeetCodeV1.prototype.insertToAnchorElement = function (elem) {
     }
   }
 };
-/* Creates a ✔️ tick mark before "Run Code" button signaling Code Sync has done its job */
+/* Creates a ✔️ tick mark before "Run Code" button signaling LeetHub has done its job */
 LeetCodeV1.prototype.markUploaded = function () {
   let elem = document.getElementById(this.progressSpinnerElementId);
   if (elem) {
@@ -524,8 +524,8 @@ function LeetCodeV2() {
   this.submissionData;
   this.submissionId;
   this.difficulty;
-  this.progressSpinnerElementId = 'codesync_progress_elem';
-  this.progressSpinnerElementClass = 'codesync_progress';
+  this.progressSpinnerElementId = 'leethub_progress_elem';
+  this.progressSpinnerElementClass = 'leethub_progress';
   this.injectSpinnerStyle();
 }
 LeetCodeV2.prototype.init = async function () {
@@ -576,7 +576,7 @@ LeetCodeV2.prototype.init = async function () {
 LeetCodeV2.prototype.findCode = function () {
   const code = this.getCode();
   if (!code) {
-    throw new CodeSyncError('SolutionCodeNotFound');
+    throw new LeetHubError('SolutionCodeNotFound');
   }
 
   return code;
@@ -601,12 +601,12 @@ LeetCodeV2.prototype.getLanguageExtension = function () {
 
   const tag = document.querySelector('button[id^="headlessui-listbox-button"]');
   if (!tag) {
-    throw new CodeSyncError('LanguageButtonNotFound');
+    throw new LeetHubError('LanguageButtonNotFound');
   }
 
   const lang = tag.innerText;
   if (languages[lang] === undefined) {
-    throw new CodeSyncError(`UnknownLanguage::${lang}`);
+    throw new LeetHubError(`UnknownLanguage::${lang}`);
   }
 
   return languages[lang];
@@ -712,10 +712,10 @@ LeetCodeV2.prototype.parseDifficulty = function () {
   return 'unknown';
 };
 LeetCodeV2.prototype.startSpinner = function () {
-  let elem = document.getElementById('codesync_progress_anchor_element');
+  let elem = document.getElementById('leethub_progress_anchor_element');
   if (!elem) {
     elem = document.createElement('span');
-    elem.id = 'codesync_progress_anchor_element';
+    elem.id = 'leethub_progress_anchor_element';
     elem.style = 'margin-right: 20px;padding-top: 2px;';
   }
   elem.innerHTML = `<div id="${this.progressSpinnerElementId}" class="${this.progressSpinnerElementClass}"></div>`;
@@ -779,7 +779,7 @@ const getSubmissionPageBtns = () => {
 
 const createToolTip = () => {
   const toolTip = document.createElement('div');
-  toolTip.id = 'Code Sync-upload-tooltip';
+  toolTip.id = 'leethub-upload-tooltip';
   toolTip.textContent =
     'Manually upload this submission to GitHub (beta).\nThis will OVERWRITE your current submission.\nPlease be mindful of your GitHub rate-limits.';
   toolTip.className =
@@ -789,7 +789,7 @@ const createToolTip = () => {
 
 const createGitIcon = () => {
   const uploadIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  uploadIcon.setAttribute('id', 'Code Sync-upload-icon');
+  uploadIcon.setAttribute('id', 'leethub-upload-icon');
   uploadIcon.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
   uploadIcon.setAttribute('width', '16');
   uploadIcon.setAttribute('height', '17');
@@ -811,11 +811,11 @@ const createGitIcon = () => {
 
 function addManualSubmitBtn(eventHandler) {
   const btns = getSubmissionPageBtns();
-  if (btns.innerText.includes('Solution') && !btns.innerText.includes('Code Sync')) {
+  if (btns.innerText.includes('Solution') && !btns.innerText.includes('LeetHub')) {
     btns.appendChild(
       (() => {
         const btn = document.createElement('button');
-        btn.innerText = 'Sync w/ Code Sync';
+        btn.innerText = 'Sync w/ LeetHub';
         btn.setAttribute('style', 'background-color:darkorange');
         btn.setAttribute(
           'class',
@@ -977,7 +977,7 @@ function sortTopicsInReadme(markdownFile) {
   const leetCodeSection = markdownFile.match(
     new RegExp(`${leetCodeSectionStart}([\\s\\S]*)${leetCodeSectionEnd}`),
   )?.[1];
-  if (leetCodeSection == null) throw new util_CodeSyncError('LeetCodeTopicSectionNotFound');
+  if (leetCodeSection == null) throw new util_LeetHubError('LeetCodeTopicSectionNotFound');
   
 
   // Remove the header
@@ -997,7 +997,7 @@ function sortTopicsInReadme(markdownFile) {
     if (topicHeaderIndex < leetCodeSectionStartIndex) {
       // matches the next '|\n' that doesn't precede a '|'. Typically this is '|\n#. Should always match if topic existed elsewhere.
       const endTopicString = markdownFile.slice(topicHeaderIndex).match(/\|\n[^|]/)?.[0];
-      if (endTopicString == null) throw new util_CodeSyncError('EndOfTopicNotFound');
+      if (endTopicString == null) throw new util_LeetHubError('EndOfTopicNotFound');
 
       // Get the old problems for merge
       const endTopicIndex = markdownFile.indexOf(endTopicString, topicHeaderIndex + 1);
@@ -1049,13 +1049,13 @@ function sortTopicsInReadme(markdownFile) {
 
 
 /* Commit messages */
-const readmeMsg = 'Create README - Code Sync';
+const readmeMsg = 'Create README - LeetHub';
 const updateReadmeMsg = 'Update README - Topic Tags';
 const updateStatsMsg = 'Updated stats';
-const discussionMsg = 'Prepend discussion post - Code Sync';
-const createNotesMsg = 'Attach NOTES - Code Sync';
+const discussionMsg = 'Prepend discussion post - LeetHub';
+const createNotesMsg = 'Attach NOTES - LeetHub';
 const defaultRepoReadme =
-  'A collection of LeetCode questions to ace the coding interview! - Created using [Code Sync](https://github.com/Sridattasai18/Code Sync-2.0)';
+  'A collection of LeetCode questions to ace the coding interview! - Created using [LeetHub v2](https://github.com/Sridattasai18/LeetHub-2.0)';
 const readmeFilename = 'README.md';
 const statsFilename = 'stats.json';
 
@@ -1104,7 +1104,7 @@ const encode = data => btoa(unescape(encodeURIComponent(data)));
  *
  * @returns {Promise<string>} - A promise that resolves with the new SHA of the content after successful upload.
  *
- * @throws {CodeSyncError} - Throws an error if the response is not OK (e.g., HTTP status code is not `200-299`).
+ * @throws {LeetHubError} - Throws an error if the response is not OK (e.g., HTTP status code is not `200-299`).
  */
 const upload = async (token, hook, content, problem, filename, sha, message) => {
   const path = getPath(problem, filename);
@@ -1127,7 +1127,7 @@ const upload = async (token, hook, content, problem, filename, sha, message) => 
 
   const res = await fetch(URL, options);
   if (!res.ok) {
-    throw new util_CodeSyncError(res.status, { cause: res });
+    throw new util_LeetHubError(res.status, { cause: res });
   }
   console.log(`Successfully committed ${getPath(problem, filename)} to github`);
 
@@ -1192,9 +1192,9 @@ const setPersistentStats = async localStats => {
   const pStatsEncoded = encode(JSON.stringify(pStats));
   const sha = localStats?.shas?.[readmeFilename]?.[''] || '';
 
-  const { codesync_token: token, codesync_hook: hook } = await leetcode_api.storage.local.get([
-    'codesync_token',
-    'codesync_hook',
+  const { leethub_token: token, leethub_hook: hook } = await leetcode_api.storage.local.get([
+    'leethub_token',
+    'leethub_hook',
   ]);
 
   try {
@@ -1243,12 +1243,12 @@ const updateReadmeWithDiscussionPost = async (
   shouldPreprendDiscussionPosts
 ) => {
   let responseSHA;
-  const { codesync_token, codesync_hook } = await leetcode_api.storage.local.get([
-    'codesync_token',
-    'codesync_hook',
+  const { leethub_token, leethub_hook } = await leetcode_api.storage.local.get([
+    'leethub_token',
+    'leethub_hook',
   ]);
 
-  return getGitHubFile(codesync_token, codesync_hook, directory, filename)
+  return getGitHubFile(leethub_token, leethub_hook, directory, filename)
     .then(resp => resp.json())
     .then(data => {
       responseSHA = data.sha;
@@ -1258,7 +1258,7 @@ const updateReadmeWithDiscussionPost = async (
       shouldPreprendDiscussionPosts ? encode(addition + existingContent) : encode(existingContent)
     )
     .then(newContent =>
-      upload(codesync_token, codesync_hook, newContent, directory, filename, responseSHA, commitMsg)
+      upload(leethub_token, leethub_hook, newContent, directory, filename, responseSHA, commitMsg)
     );
 };
 
@@ -1276,31 +1276,31 @@ const updateReadmeWithDiscussionPost = async (
  *
  * @returns {Promise<string>} A promise that resolves with the new SHA of the content after successful upload.
  *
- * @throws {CodeSyncError} If there's no token defined, the mode type is not `commit`, or if no repository hook is defined.
+ * @throws {LeetHubError} If there's no token defined, the mode type is not `commit`, or if no repository hook is defined.
  */
 async function uploadGitWith409Retry(code, problemName, filename, commitMsg, optionals) {
   let token;
   let hook;
 
   const storageData = await leetcode_api.storage.local.get([
-    'codesync_token',
+    'leethub_token',
     'mode_type',
-    'codesync_hook',
+    'leethub_hook',
     'stats',
   ]);
 
-  token = storageData.codesync_token;
+  token = storageData.leethub_token;
   if (!token) {
-    throw new util_CodeSyncError('Code SyncTokenUndefined');
+    throw new util_LeetHubError('LeethubTokenUndefined');
   }
 
   if (storageData.mode_type !== 'commit') {
-    throw new util_CodeSyncError('Code SyncNotAuthorizedByGit');
+    throw new util_LeetHubError('LeetHubNotAuthorizedByGit');
   }
 
-  hook = storageData.codesync_hook;
+  hook = storageData.leethub_hook;
   if (!hook) {
-    throw new util_CodeSyncError('NoRepoDefined');
+    throw new util_LeetHubError('NoRepoDefined');
   }
 
   /* Get SHA, if it exists */
@@ -1407,13 +1407,13 @@ function createRepoReadme() {
 
 async function updateReadmeTopicTagsWithProblem(topicTags, problemName) {
   if (topicTags == null) {
-    console.log(new util_CodeSyncError('TopicTagsNotFound'));
+    console.log(new util_LeetHubError('TopicTagsNotFound'));
     return;
   }
 
-  const { codesync_token, codesync_hook, stats } = await leetcode_api.storage.local.get([
-    'codesync_token',
-    'codesync_hook',
+  const { leethub_token, leethub_hook, stats } = await leetcode_api.storage.local.get([
+    'leethub_token',
+    'leethub_hook',
     'stats',
   ]);
 
@@ -1422,8 +1422,8 @@ async function updateReadmeTopicTagsWithProblem(topicTags, problemName) {
 
   try {
     const { content, sha } = await getGitHubFile(
-      codesync_token,
-      codesync_hook,
+      leethub_token,
+      leethub_hook,
       readmeFilename
     ).then(resp => resp.json());
     readme = content;
@@ -1437,7 +1437,7 @@ async function updateReadmeTopicTagsWithProblem(topicTags, problemName) {
   }
   readme = decode(readme);
   for (let topic of topicTags) {
-    readme = appendProblemToReadme(topic.name, readme, codesync_hook, problemName);
+    readme = appendProblemToReadme(topic.name, readme, leethub_hook, problemName);
   }
   readme = sortTopicsInReadme(readme);
   readme = encode(readme);
@@ -1458,7 +1458,7 @@ function loader(leetCode) {
         iterations++;
         if (iterations > 9) {
           // poll for max 10 attempts (10 seconds)
-          throw new util_CodeSyncError('Could not find successful submission after 10 seconds.');
+          throw new util_LeetHubError('Could not find successful submission after 10 seconds.');
         }
         return;
       }
@@ -1472,19 +1472,19 @@ function loader(leetCode) {
 
       const probStats = leetCode.parseStats();
       if (!probStats) {
-        throw new util_CodeSyncError('SubmissionStatsNotFound');
+        throw new util_LeetHubError('SubmissionStatsNotFound');
       }
 
       const probStatement = leetCode.parseQuestion();
       if (!probStatement) {
-        throw new util_CodeSyncError('ProblemStatementNotFound');
+        throw new util_LeetHubError('ProblemStatementNotFound');
       }
 
       const problemName = leetCode.getProblemNameSlug();
       const alreadyCompleted = await isCompleted(problemName);
       const language = leetCode.getLanguageExtension();
       if (!language) {
-        throw new util_CodeSyncError('LanguageNotFound');
+        throw new util_LeetHubError('LanguageNotFound');
       }
       const filename = problemName + language;
 
@@ -1531,7 +1531,7 @@ function loader(leetCode) {
       leetCode.markUploadFailed();
       clearInterval(intervalId);
 
-      if (!(err instanceof util_CodeSyncError)) {
+      if (!(err instanceof util_LeetHubError)) {
         console.error(err);
         return;
       }
@@ -1561,7 +1561,7 @@ async function leetcode_listenForSubmissionId() {
     type: 'LEETCODE_SUBMISSION',
   });
   if (submissionId == null) {
-    console.log(new util_CodeSyncError('SubmissionIdNotFound'));
+    console.log(new util_LeetHubError('SubmissionIdNotFound'));
     return;
   }
   return submissionId;
@@ -1578,10 +1578,10 @@ async function v2SubmissionHandler(event, leetCode) {
   }
 
   const authenticated =
-    !isEmptyObject(await leetcode_api.storage.local.get(['codesync_token'])) &&
-    !isEmptyObject(await leetcode_api.storage.local.get(['codesync_hook']));
+    !isEmptyObject(await leetcode_api.storage.local.get(['leethub_token'])) &&
+    !isEmptyObject(await leetcode_api.storage.local.get(['leethub_hook']));
   if (!authenticated) {
-    throw new util_CodeSyncError('UserNotAuthenticated');
+    throw new util_LeetHubError('UserNotAuthenticated');
   }
 
   // is click or is ctrl enter
@@ -1630,11 +1630,11 @@ submitBtnObserver.observe(document.body, {
 /* Sync to local storage */
 leetcode_api.storage.local.get('isSync', data => {
   const keys = [
-    'codesync_token',
-    'codesync_username',
-    'pipe_codesync',
+    'leethub_token',
+    'leethub_username',
+    'pipe_leethub',
     'stats',
-    'codesync_hook',
+    'leethub_hook',
     'mode_type',
   ];
   if (!data || !data.isSync) {
@@ -1644,10 +1644,10 @@ leetcode_api.storage.local.get('isSync', data => {
       });
     });
     leetcode_api.storage.local.set({ isSync: true }, () => {
-      console.log('Code Sync Synced to local values');
+      console.log('LeetHub Synced to local values');
     });
   } else {
-    console.log('Code Sync Local storage already synced!');
+    console.log('LeetHub Local storage already synced!');
   }
 });
 
@@ -1666,7 +1666,7 @@ submitBtn(
   )
 );
 
-class CodeSyncNetworkError extends util_CodeSyncError {
+class LeetHubNetworkError extends util_LeetHubError {
   constructor(response) {
     super(response.statusText);
     this.status = response.status;

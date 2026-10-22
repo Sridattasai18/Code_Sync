@@ -34,10 +34,10 @@ const DIFFICULTY = Object.freeze({
   UNKNOWN: 'Unknown',
 });
 
-class CodeSyncError extends Error {
+class LeetHubError extends Error {
   constructor(message) {
     super(message);
-    this.name = 'Code SyncErr';
+    this.name = 'LeetHubErr';
   }
 }
 
@@ -53,7 +53,7 @@ function isEmptyObject(obj) {
 
 function assert(truthy, msg) {
   if (!truthy) {
-    throw new CodeSyncError(msg);
+    throw new LeetHubError(msg);
   }
 }
 
@@ -104,7 +104,7 @@ function getBrowser() {
   } else if (typeof browser !== 'undefined' && typeof browser.runtime !== 'undefined') {
     return browser;
   } else {
-    throw new CodeSyncError('BrowserNotSupported');
+    throw new LeetHubError('BrowserNotSupported');
   }
 }
 
@@ -155,7 +155,7 @@ function addLeadingZeros(title) {
 }
 
 function formatStats(time, timePercentile, space, spacePercentile) {
-  return `Time: ${time} (${timePercentile}%), Space: ${space} (${spacePercentile}%) - Code Sync`;
+  return `Time: ${time} (${timePercentile}%), Space: ${space} (${spacePercentile}%) - LeetHub`;
 }
 
 function isObject(obj) {
@@ -220,6 +220,6 @@ export {
   getDifficulty,
   isEmptyObject,
   languages,
-  CodeSyncError,
+  LeetHubError,
   mergeStats,
 };

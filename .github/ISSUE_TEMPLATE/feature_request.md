@@ -1,6 +1,6 @@
 ---
 name: Feature request
-about: What would enhance your Code Sync experience?
+about: What would enhance your LeetHub experience?
 title: ''
 labels: ''
 assignees: ''
